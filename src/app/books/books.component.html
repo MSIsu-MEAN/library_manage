@@ -86,7 +86,8 @@
                         <td class="w-25">{{items.description}}</td>
                         <td>{{items.publicationYear}}</td>
                         <td>{{items.ISBN}}</td>
-                        <td><button class="btn btn-dark" (click)="update.show();getParticulars(items.ISBN)">Edit</button>
+                        <td><button class="btn btn-dark"
+                                (click)="update.show();getParticulars(items.ISBN)">Edit</button>
                         </td>
                         <td><button class="btn btn-danger" (click)="delete(items.ISBN)">Delete</button></td>
                     </tr>
@@ -152,9 +153,15 @@
                                             <input class="form-control form-control-lg roundedInput" type="text"
                                                 id="publicationYear" formControlName="publicationYear"
                                                 autocomplete="off">
-                                            <div *ngIf="myForm.get('publicationYear')?.invalid && myForm.get('publicationYear')?.touched"
+                                            <div *ngIf="myForm.get('publicationYear')?.invalid && (myForm.get('publicationYear')?.touched || myForm.get('publicationYear')?.dirty)"
                                                 class="text-danger">
-                                                * Publication Year is required.
+                                                <small
+                                                    *ngIf="myForm.get('publicationYear')?.errors?.required">Publication
+                                                    Year is required.</small>
+                                                <small *ngIf="myForm.get('publicationYear')?.errors?.min">Publication
+                                                    Year must be at least 1000.</small>
+                                                <small *ngIf="myForm.get('publicationYear')?.errors?.max">Publication
+                                                    Year cannot be more than 2024.</small>
                                             </div>
 
                                             <label class="fs-14 fw-500">ISBN</label>
