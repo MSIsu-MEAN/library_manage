@@ -1,0 +1,240 @@
+<div class="container-fluid"
+    style="background-image: linear-gradient(rgba(141, 146, 148, 0.7),rgba(159, 148, 148, 0.8)), url(assets/images/bg1.jpg); background-size: cover;">
+
+    <!-- Sign-In Management -->
+    <section id="section1_signin"
+        style="background-image: linear-gradient(rgba(227, 234, 238, 0.7),rgba(41, 38, 38, 0.7)), url(assets/images/book2.jpg); background-size: cover;">
+        <div class="container-fluid-md container-fluid-sm">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="text-center mt-5 ">
+                        <h1>Happily Library</h1>
+                        <h2>A Home For Your Books</h2>
+                        <h3>Library is a free.</h3>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="text-dark d-flex justify-content-center mt-5">
+                        <form #form="ngForm">
+                            <div class="mb-2 ">
+                                <label for="exampleInputEmail1" class="form-label">User Name</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" [(ngModel)]="obj.email"
+                                    #email="ngModel" name="email" aria-describedby="emailHelp" required>
+                            </div>
+                            <!-- <span *ngIf="!email.valid && (email.touched || tocheck)" class="text-danger">* Email Required</span> -->
+
+                            <div class="mb-1">
+                                <label for="exampleInputPassword1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                    [(ngModel)]="obj.password" #password="ngModel" name="password" required>
+                            </div>
+                            <!-- <span *ngIf="!password.valid && (password.touched || tocheck)" class="text-danger">* Password Required</span> -->
+                            <br>
+                            <span class=" d-flex justify-content-center">
+                                <button type="submit" class="btn btn-dark mb-3 text-center">Sign-In</button>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books List Management -->
+    <section id="section2_books" class="mt-5">
+        <div class="container-md container-sm text-dark">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Books Collections</h2>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" name="query" placeholder="Search....." [(ngModel)]="query" (keyup)="onSearch()"
+                        class="p-1 rounded-circle-3" autocomplete="off">
+                </div>
+                <div class="col-sm-2">
+                    <h4>Total Books:&nbsp;{{booksList?.length}}</h4>
+                </div>
+                <div class="col-sm-2">
+                    <span>
+                        <button type="button" class="btn btn-dark" (click)="add.show()">Add</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container-md container-sm table-responsive">
+            <table class="table table-hover table-secondary ">
+                <thead>
+                    <tr>
+                        <!-- <th scope="col" class="table-dark">S.No.</th> -->
+                        <th scope="col" class="table-dark">Title</th>
+                        <th scope="col" class="table-dark">Author</th>
+                        <th scope="col" class="table-dark">Description</th>
+                        <th scope="col" class="table-dark">Year</th>
+                        <th scope="col" class="table-dark">ISBN</th>
+                        <th scope="col" class="table-dark">Edit</th>
+                        <th scope="col" class="table-dark">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let items of booksList | paginate: { itemsPerPage: itemsPerPage, currentPage: page };let i = index">
+                        <!-- <td>{{i+1}}</td> -->
+                        <td>{{items.title}}</td>
+                        <td>{{items.author}}</td>
+                        <td class="w-25">{{items.description}}</td>
+                        <td>{{items.publicationYear}}</td>
+                        <td>{{items.ISBN}}</td>
+                        <td><button class="btn btn-dark" (click)="update.show();getParticulars(items.ISBN)">Edit</button>
+                        </td>
+                        <td><button class="btn btn-danger" (click)="delete(items.ISBN)">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <pagination-controls class="text-center" (pageChange)="page = $event"
+                    [autoHide]="true"></pagination-controls>
+            </div>
+        </div>
+    </section>
+
+    <!-- add model -->
+
+    <div class="modal fade mymodal" bsModal #add="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1"
+        role="dialog" aria-labelledby="dialog-static-name">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0 pt-4 px-4">
+                    <h4 id="dialog-static-name" class="modal-title pull-left mymodaltitle">
+                        Add Book Specifications
+                    </h4>
+                    <span class="px-5 ms-5">
+                        <button type="button" aria-label="Close" (click)="add.hide()" class="btn btn-outline-success">
+                            <img src="assets/images/x-circle.png">
+                        </button>
+                    </span>
+                </div>
+                <div class="modal-body px-4">
+                    <div class="scroller mb-3">
+                        <ul class="list-unstyled mb-0 mr-3">
+                            <li>
+                                <div class="d-flex align-items-center">
+
+                                    <div class="text-dark">
+                                        <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+                                            <label class="fs-14 fw-500">Title</label>
+                                            <input class="form-control form-control-lg roundedInput" type="text"
+                                                id="title" formControlName="title" autocomplete="off">
+                                            <div *ngIf="myForm.get('title')?.invalid && myForm.get('title')?.touched"
+                                                class="text-danger">
+                                                * Title is required.
+                                            </div>
+
+                                            <label class="fs-14 fw-500">Author Name</label>
+                                            <input class="form-control form-control-lg roundedInput" type="text"
+                                                id="author" formControlName="author" autocomplete="off">
+                                            <div *ngIf="myForm.get('author')?.invalid && myForm.get('author')?.touched && myForm.get('author')?.errors?.['required']"
+                                                class="text-danger">
+                                                * Author Name is required.
+                                            </div>
+
+                                            <label class="fs-14 fw-500">Description</label>
+                                            <textarea class="form-control form-control-lg roundedInput" type="text"
+                                                id="description" formControlName="description"
+                                                autocomplete="off"></textarea>
+                                            <div *ngIf="myForm.get('description')?.invalid && myForm.get('description')?.touched"
+                                                class="text-danger">
+                                                * Description is required.
+                                            </div>
+
+                                            <label class="fs-14 fw-500">Publication Year</label>
+                                            <input class="form-control form-control-lg roundedInput" type="text"
+                                                id="publicationYear" formControlName="publicationYear"
+                                                autocomplete="off">
+                                            <div *ngIf="myForm.get('publicationYear')?.invalid && myForm.get('publicationYear')?.touched"
+                                                class="text-danger">
+                                                * Publication Year is required.
+                                            </div>
+
+                                            <label class="fs-14 fw-500">ISBN</label>
+                                            <input class="form-control form-control-lg roundedInput" type="text"
+                                                id="ISBN" formControlName="ISBN" autocomplete="off">
+                                            <div *ngIf="myForm.get('ISBN')?.invalid && myForm.get('ISBN')?.touched"
+                                                class="text-danger">
+                                                * ISBN is required.
+                                            </div>
+                                            <br>
+                                            <button type="submit" class="btn btn-success"
+                                                [disabled]="myForm.invalid">Submit</button>
+                                            <button type="button" class="btn btn-dark ms-5"
+                                                (click)="add.hide()">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- update model -->
+    <div class="modal fade mymodal" bsModal #update="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1"
+        role="dialog" aria-labelledby="dialog-static-name">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0 pt-4 px-4">
+                    <h4 id="dialog-static-name" class="modal-title pull-left mymodaltitle">
+                        Edit Book Specifications
+                    </h4>
+                    <span class="px-5 ms-5">
+                        <button type="button" aria-label="Close" (click)="update.hide()"
+                            class="btn btn-outline-success">
+                            <img src="assets/images/x-circle.png">
+                        </button>
+                    </span>
+                </div>
+                <div class="modal-body px-4">
+                    <div class="scroller mb-3">
+                        <ul class="list-unstyled mb-0 mr-3">
+                            <li>
+                                <div class="d-flex align-items-center">
+
+                                    <div class="text-dark">
+                                        <form [formGroup]="editForm" (ngSubmit)="updates()">
+                                            <label class="fs-14 fw-500">Title</label>
+                                            <input class="form-control form-control-lg roundedInput" id="utitle"
+                                                formControlName="title">
+                                            <label class="fs-14 fw-500">Author Name</label>
+                                            <input class="form-control form-control-lg roundedInput" id="uauthor"
+                                                formControlName="author">
+                                            <label class="fs-14 fw-500">Description</label>
+                                            <textarea class="form-control form-control-lg roundedInput"
+                                                id="udescription" formControlName="description"></textarea>
+
+                                            <label class="fs-14 fw-500">Publication Year</label>
+                                            <input class="form-control form-control-lg roundedInput"
+                                                id="upublicationYear" formControlName="publicationYear">
+                                            <label class="fs-14 fw-500">ISBN</label>
+                                            <input class="form-control form-control-lg roundedInput" id="uISBN"
+                                                formControlName="ISBN" readonly>
+
+                                            <br>
+                                            <button type="submit" class="btn btn-success">Update</button>
+                                            <button type="button" class="btn btn-dark ms-5"
+                                                (click)="update.hide()">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
