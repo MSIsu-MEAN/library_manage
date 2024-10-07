@@ -28,12 +28,12 @@ export class BooksComponent implements OnInit {
 
 
   constructor(private apiService: ServiceService, public bsModalRef: BsModalRef, public toastrService: ToastrService, private changeDetectorRef: ChangeDetectorRef, private formBuilder: FormBuilder) {
-    this.myForm = new FormGroup({
-      title: new FormControl('', Validators.required),
-      author: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
-      publicationYear: new FormControl('', Validators.required),
-      ISBN: new FormControl('', Validators.required)
+    this.myForm = this.formBuilder.group({
+      title: ['',[ Validators.required]],
+      author: ['',[ Validators.required]],
+      description: ['',[ Validators.required]],
+      publicationYear: ['', [Validators.required, Validators.min(1000), Validators.max(2024)]],
+      ISBN: ['',[ Validators.required]],
     });
     this.editForm = this.formBuilder.group({
       title: [''],
