@@ -67,7 +67,6 @@
             <table class="table table-hover table-secondary ">
                 <thead>
                     <tr>
-                        <!-- <th scope="col" class="table-dark">S.No.</th> -->
                         <th scope="col" class="table-dark">Title</th>
                         <th scope="col" class="table-dark">Author</th>
                         <th scope="col" class="table-dark">Description</th>
@@ -79,8 +78,7 @@
                 </thead>
                 <tbody>
                     <tr
-                        *ngFor="let items of booksList | paginate: { itemsPerPage: itemsPerPage, currentPage: page };let i = index">
-                        <!-- <td>{{i+1}}</td> -->
+                        *ngFor="let items of booksList | paginate: { itemsPerPage: itemsPerPage, currentPage: page };">
                         <td>{{items.title}}</td>
                         <td>{{items.author}}</td>
                         <td class="w-25">{{items.description}}</td>
