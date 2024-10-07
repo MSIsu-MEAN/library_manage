@@ -9,20 +9,6 @@ import { environment } from 'src/environments/environment';
 export class ServiceService {
 
   constructor(public httpClient: HttpClient) { }
-
-  // httpOptions = {
-  //   headers: new HttpHeaders({
-  //     'content-type': 'application/json'
-  //   })
-  // }
-
-  // getData(url: any) {
-  //   return this.httpClient.post(environment.commonUrl + url, this.httpOptions)
-  // }
-  // postData(url: any, data: any) {
-  //   return this.httpClient.post(environment.commonUrl + url, data, this.httpOptions)
-  // }
-
   // GET method
   getData(): Observable<any> {
     return this.httpClient.get(`${environment.commonUrl}`).pipe(
