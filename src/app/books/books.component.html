@@ -15,20 +15,20 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="text-dark d-flex justify-content-center mt-5">
-                        <form #form="ngForm">
+                        <form #form="ngForm" (ngSubmit)="submit(form)">
                             <div class="mb-2 ">
-                                <label for="exampleInputEmail1" class="form-label">User Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" [(ngModel)]="obj.email"
-                                    #email="ngModel" name="email" aria-describedby="emailHelp" required>
+                                <label for="exampleInputname1" class="form-label">User Name</label>
+                                <input type="name" class="form-control" id="exampleInputname1" [(ngModel)]="obj.name"
+                                    #name="ngModel" name="name" aria-describedby="nameHelp" required autocomplete="off">
                             </div>
-                            <!-- <span *ngIf="!email.valid && (email.touched || tocheck)" class="text-danger">* Email Required</span> -->
+                            <span *ngIf="!name.valid && (name.touched || tocheck)" class="text-danger">* Name Required</span>
 
                             <div class="mb-1">
                                 <label for="exampleInputPassword1" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                <input type="password" class="form-control" id="exampleInputPassword1" autocomplete="off"
                                     [(ngModel)]="obj.password" #password="ngModel" name="password" required>
                             </div>
-                            <!-- <span *ngIf="!password.valid && (password.touched || tocheck)" class="text-danger">* Password Required</span> -->
+                            <span *ngIf="!password.valid && (password.touched || tocheck)" class="text-danger">* Password Required</span>
                             <br>
                             <span class=" d-flex justify-content-center">
                                 <button type="submit" class="btn btn-dark mb-3 text-center">Sign-In</button>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-sm-2">
                     <span>
-                        <button type="button" class="btn btn-dark" (click)="add.show()">Add</button>
+                        <button type="button" class="btn btn-dark" (click)="add.show()" [disabled]="!status">Add</button>
                     </span>
                 </div>
             </div>
@@ -87,9 +87,9 @@
                         <td>{{items.publicationYear}}</td>
                         <td>{{items.ISBN}}</td>
                         <td><button class="btn btn-dark"
-                                (click)="update.show();getParticulars(items.ISBN)">Edit</button>
+                                (click)="update.show();getParticulars(items.ISBN)" [disabled]="!status">Edit</button>
                         </td>
-                        <td><button class="btn btn-danger" (click)="delete(items.ISBN)">Delete</button></td>
+                        <td><button class="btn btn-danger" (click)="delete(items.ISBN)" [disabled]="!status">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
